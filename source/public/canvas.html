@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>思间 · 个人思维画布</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/canvas.css"></head>
+<body>
+<div id="app">
+<aside class="sidebar" id="sidebar">
+ <a class="brand" href="/" target="_top"><span class="brand-symbol"><svg viewBox="0 0 32 32"><path d="M16 6v20M16 16 7 9M16 16 26 11M16 22 7 26"/><circle cx="16" cy="5" r="3"/><circle cx="6" cy="8" r="3"/><circle cx="27" cy="10" r="3"/><circle cx="6" cy="27" r="3"/></svg></span><span>思间<small>MINDSPACE</small></span></a>
+ <div class="space-label"><span data-icon="lock"></span> 我的私人空间</div>
+ <button class="primary new-map" id="new-map"><span data-icon="plus"></span>新建导图 <kbd>Alt N</kbd></button>
+ <label class="search"><span data-icon="search"></span><input id="map-search" placeholder="搜索导图" aria-label="搜索导图"></label>
+ <div class="section-title">我的导图 <span id="map-count">0</span></div>
+ <nav id="map-list" class="map-list" aria-label="导图列表"></nav>
+ <div class="sidebar-bottom"><button class="plain trash-button" id="trash"><span data-icon="trash"></span>最近删除</button><div class="personal"><div class="avatar" id="avatar">我</div><div><strong>个人空间</strong><small id="user-name">正在连接…</small></div><span data-icon="shield"></span></div></div>
+</aside>
+<main class="workspace">
+ <header class="topbar"><button class="icon-button" id="toggle-sidebar" aria-label="切换侧栏" data-icon="panel"></button><div class="document-heading"><div class="document-title"><span class="doc-icon" data-icon="map"></span><input id="map-title" aria-label="导图名称" maxlength="100" value="思间"></div><button class="save-state" id="save-state"><span class="status-dot"></span><span id="save-text">正在连接云端</span></button></div><div class="top-actions"><button class="icon-button" id="undo" title="撤销 Ctrl+Z" aria-label="撤销" data-icon="undo"></button><button class="icon-button" id="redo" title="重做 Ctrl+Shift+Z" aria-label="重做" data-icon="redo"></button><div class="divider"></div><button class="icon-button" id="history" aria-label="历史版本" title="历史版本" data-icon="history"></button><button class="outline" id="export"><span data-icon="download"></span>导出<span data-icon="chevron"></span></button><button class="icon-button" id="help" aria-label="操作帮助" data-icon="help"></button></div></header>
+ <div class="board-area"><section id="canvas" class="canvas" tabindex="0" aria-label="思维导图画布"><div class="canvas-caption"><span class="caption-line"></span>给想法，一点生长的空间</div>
+<div id="basic-tools" class="basic-tools" aria-label="画布工具">
+<button data-tool="select" class="active" title="选择 / 移动 V" aria-label="选择工具"><span data-icon="pointer"></span></button>
+<button data-tool="text" title="文字 T" aria-label="插入文字"><span data-icon="type"></span></button>
+<button id="canvas-image" title="插入图片" aria-label="插入独立图片"><span data-icon="image"></span></button>
+<button data-tool="rectangle" title="矩形节点 R" aria-label="插入矩形节点"><span data-icon="rectangle"></span></button>
+<button data-tool="note" title="便签 N" aria-label="插入便签"><span data-icon="sticky"></span></button>
+<div class="tool-separator"></div>
+<button id="line-tool" title="连线 L" aria-label="连线工具"><span data-icon="connector"></span></button>
+</div>
+<div id="line-options" class="line-options hidden"><button data-line-mode="straight">↗ <span>直线</span></button><button data-line-mode="elbow">↳ <span>折线</span></button><button data-line-mode="curve">⌁ <span>曲线</span></button><button data-relationship-mode>┄ <span>关系虚线</span></button></div>
+<div id="format-toolbar" class="format-toolbar hidden" aria-label="基础格式">
+<div class="text-format">
+<select id="font-family" aria-label="字体"><option value="sans">系统黑体</option><option value="serif">宋体</option><option value="mono">等宽字体</option></select>
+<input id="font-size" type="number" min="10" max="96" step="1" aria-label="字号" title="字号">
+<button id="font-bold" class="format-bold" aria-label="加粗" title="加粗 Ctrl+B" aria-pressed="false">B</button>
+<select id="text-align" aria-label="文字对齐"><option value="left">左对齐</option><option value="center">居中</option><option value="right">右对齐</option></select>
+<label class="color-control" title="文字颜色">A<input id="text-color" type="color" aria-label="文字颜色"></label>
+</div>
+<div class="connector-format">
+<button id="cut-line" class="line-label-button cut-line-button" title="剪断当前连线，保留两端节点" aria-label="剪断连线">✂ 剪断</button>
+<button id="line-label" class="line-label-button" aria-label="编辑连线文字" title="添加或修改连线文字">连线文字</button>
+<select id="line-type" aria-label="连线样式"><option value="straight">直线</option><option value="elbow">折线</option><option value="curve">曲线</option></select>
+<select id="line-dash" aria-label="实线或虚线"><option value="solid">实线</option><option value="dashed">虚线</option></select>
+<select id="line-width" aria-label="连线粗细"><option value="1">细</option><option value="2">标准</option><option value="3">粗</option></select>
+<button id="line-arrow" aria-label="连线箭头" aria-pressed="true" title="显示箭头">↗</button>
+<input id="line-color" type="color" aria-label="连线颜色" title="连线颜色"><button id="copy-line-style" class="line-label-button" title="复制当前线条的颜色、粗细、虚实、线型和箭头">复制样式</button><button id="paste-line-style" class="line-label-button" title="将复制的线条样式应用到当前连线">粘贴样式</button>
+</div><span id="locked-hint" class="hidden">已锁定</span>
+</div>
+<div id="tool-hint" class="tool-hint hidden" role="status"></div><div id="world" class="world"><svg id="edges" class="edges" role="group" aria-label="导图连线"></svg><div id="nodes"></div></div><div id="welcome" class="welcome-card hidden"><span class="eyebrow">从这里开始</span><strong>一个想法，慢慢展开。</strong><p>双击节点编辑文字，选中节点后按 <kbd>Tab</kbd> 延伸想法。</p><button id="dismiss-welcome">开始记录 <span data-icon="arrow"></span></button></div><div class="canvas-footer"><span id="node-count">0 个节点</span><span>·</span><span class="shortcut-hint">右键打开菜单 · 空格拖动</span></div><div class="zoom-controls"><button class="icon-button" id="zoom-out" aria-label="缩小" data-icon="minus"></button><button class="zoom-value" id="zoom-value" title="重置为 100%">100%</button><button class="icon-button" id="zoom-in" aria-label="放大" data-icon="plus"></button><div class="divider"></div><button class="icon-button" id="fit" aria-label="适应画布" title="适应画布" data-icon="fit"></button></div><div class="floating-tools"><button id="add-child" title="添加子节点 Tab"><span data-icon="branch"></span><span>子节点</span></button><button id="add-sibling" title="添加同级节点 Enter"><span data-icon="plus"></span><span>同级</span></button><div class="divider"></div><button id="add-relation" title="连接两个主题的关系虚线"><span data-icon="connector"></span><span>关系</span></button><button id="add-image" title="插入图片"><span data-icon="image"></span><span>图片</span></button><button id="arrange" title="自动整理"><span data-icon="layout"></span><span>整理</span></button></div></section>
+ <aside id="inspector" class="inspector hidden"><div class="inspector-header"><strong>节点详情</strong><button class="icon-button" id="close-inspector" aria-label="关闭节点详情" data-icon="close"></button></div><label class="field-label" for="node-label">想法</label><textarea id="node-label" maxlength="2000" rows="3" placeholder="写下你的想法"></textarea><div class="field-label">分支颜色</div><div id="colors" class="color-list"></div><label class="field-label" for="node-notes">备注 <span>可选</span></label><textarea id="node-notes" maxlength="10000" rows="5" placeholder="补充细节、链接，或者留给以后的自己…"></textarea><div class="field-label">图片 <button class="text-button" id="inspector-image">添加</button></div><div id="node-images" class="node-images"></div><div class="field-label">上级节点</div><select id="parent-select" aria-label="更改上级节点"></select><div class="inspector-bottom"><button class="plain" id="fold"><span data-icon="fold"></span><span>折叠分支</span></button><button class="plain danger" id="delete-node"><span data-icon="trash"></span>删除节点</button></div></aside></div>
+</main></div>
+<div id="toast" class="toast hidden" role="status"></div><div id="export-menu" class="menu hidden"><button id="export-png"><span data-icon="image"></span>导出为图片 <small>PNG</small></button><button id="export-backup"><span data-icon="archive"></span>导出完整备份 <small>含图片</small></button><button id="import-backup"><span data-icon="upload"></span>导入备份文件</button></div>
+<dialog id="dialog"><div class="dialog-header"><h2 id="dialog-title"></h2><button id="dialog-close" class="icon-button" aria-label="关闭弹窗" data-icon="close"></button></div><div id="dialog-body"></div><div id="dialog-actions" class="dialog-actions"></div></dialog>
+<input type="file" id="image-input" accept="image/png,image/jpeg,image/webp,image/gif" hidden><input type="file" id="backup-input" accept=".json,.mindspace" hidden>
+<script type="module" src="/canvas.mjs"></script></body></html>
